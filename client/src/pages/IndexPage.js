@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function IndexPage() {
   const [posts, setPosts] = useState([]);
+
   useEffect(() => {
     fetch("https://hhttf0-5000.csb.app/posts")
       .then((response) => {
@@ -18,5 +19,10 @@ export default function IndexPage() {
         console.log(error);
       });
   }, []);
-  return <>{posts.length > 0 && posts.map((post) => <Post {...post} />)}</>;
+  return (
+    <div className="container">
+      {posts.length > 0 &&
+        posts.map((post, index) => <Post key={index} {...post} />)}
+    </div>
+  );
 }

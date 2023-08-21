@@ -10,14 +10,14 @@ export default function EditPost() {
   const [redirectHome, setRedirectHome] = useState(false);
 
   useEffect(() => {
-    fetch("https://hhttf0-5000.csb.app/post/" + id).then((response) => {
+    fetch(`https://hhttf0-5000.csb.app/post/${id}`).then((response) => {
       response.json().then((postInfo) => {
         setTitle(postInfo.title);
         setSummary(postInfo.summary);
         setContent(postInfo.content);
       });
     });
-  }, [id]);
+  }, []);
 
   async function updatePost(e) {
     e.preventDefault();
@@ -26,7 +26,7 @@ export default function EditPost() {
       summary,
       content,
     };
-    const response = await fetch("https://hhttf0-5000.csb.app/post/" + id, {
+    const response = await fetch(`https://hhttf0-5000.csb.app/post/${id}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -43,8 +43,11 @@ export default function EditPost() {
   }
 
   async function deletePost() {
-    const response = await fetch("https://hhttf0-5000.csb.app/post/" + id, {
+    const response = await fetch(`https://hhttf0-5000.csb.app/post/${id}`, {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
     if (response.ok) {
       setRedirectHome(true);
@@ -56,29 +59,40 @@ export default function EditPost() {
   }
 
   return (
-    <>
+    <div className="form-container">
       <form onSubmit={updatePost}>
-        <input
-          type="title"
-          placeholder={"Title"}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="summary"
-          placeholder={"Summary"}
-          value={summary}
-          onChange={(e) => setSummary(e.target.value)}
-        />
-        <input
-          type="content"
-          placeholder={"Content"}
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <button>Update post</button>
+        <div className="form-body">
+          <input
+            type="text"
+            placeholder={"Title"}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder={"Summary"}
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+          />
+          <textarea
+            cols="30"
+            rows="15"
+            className="textarea"
+            type="text"
+            placeholder={"Content"}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        </div>
+        <div className="form-footer">
+          <button className="button">Update Post</button>
+        </div>
       </form>
-      <button onClick={() => deletePost()}>Delete post</button>
-    </>
+      <div>
+        <button className="button" onClick={() => deletePost()}>
+          Delete post
+        </button>
+      </div>
+    </div>
   );
 }

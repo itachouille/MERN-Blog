@@ -35,25 +35,34 @@ export default function CreatePost() {
 
   return (
     <form onSubmit={createNewPost}>
-      <input
-        type="title"
-        placeholder={"Title"}
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <input
-        type="summary"
-        placeholder={"Summary"}
-        value={summary}
-        onChange={(e) => setSummary(e.target.value)}
-      />
-      <input
-        type="content"
-        placeholder={"Content"}
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
-      <button>Create Post</button>
+      <div className="form-container">
+        <div className="form-body">
+          <input
+            type="text"
+            placeholder={"Title"}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <input
+            type="text"
+            placeholder={"Summary"}
+            value={summary}
+            onChange={(e) => setSummary(e.target.value)}
+          />
+          <textarea
+            cols="30"
+            rows="15"
+            className="textarea"
+            type="text"
+            placeholder={"Content"}
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+          />
+        </div>
+        <div className="form-footer">
+          <button className="button">Create Post</button>
+        </div>
+      </div>
     </form>
   );
 }

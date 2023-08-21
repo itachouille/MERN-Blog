@@ -1,22 +1,26 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 
 const Post = ({ _id, title, summary, createdAt }) => {
+  const navigate = useNavigate();
+
+  function handleClick() {
+    navigate(`/post/${_id}`);
+  }
+
   return (
-    <div className="post">
-      <div className="image">
-        <Link to={`/post/${_id}`}>
-          <img src="./news.jpg" alt="" />
-        </Link>
+    <div className="post" onClick={handleClick}>
+      <div className="post-header">
+        <img
+          className="image"
+          src="https://picsum.photos/600/400"
+          alt="picture"
+        />
       </div>
-      <div className="texts">
-        <Link to={`/post/${_id}`}>
-          <h2>{title}</h2>
-        </Link>
-        <p className="info">
-          <time>{format(new Date(createdAt), "dd/MM/yyyy")}</time>
-        </p>
+      <div className="post-body">
+        <h4>{title}</h4>
+        <time>{format(new Date(createdAt), "dd/MM/yyyy")}</time>
         <p className="summary"> {summary} </p>
       </div>
     </div>

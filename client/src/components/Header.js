@@ -7,7 +7,9 @@ export default function Header() {
         Myblog
       </Link>
       <nav>
-        <Link to="/create">Create new post</Link>
+        <Link className="button" to="/create">
+          Create new post
+        </Link>
       </nav>
     </header>
   );

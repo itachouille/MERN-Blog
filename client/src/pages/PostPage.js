@@ -19,11 +19,11 @@ export default function PostPage() {
     <div className="postPage-container">
       <div className="postPage-header">
         <div className="postPage-header-left">
-          <h2>{postInfo[0].title}</h2>
-          <time>{format(new Date(postInfo[0].createdAt), "dd/MM/yyyy")}</time>
+          <h2>{postInfo.title}</h2>
+          <time>{format(new Date(postInfo.createdAt), "dd/MM/yyyy")}</time>
         </div>
         <div className="postPage-header-right">
-          <Link to={`/edit/${postInfo[0]._id}`}>
+          <Link to={`/edit/${postInfo._id}`}>
             <button className="button">Edit this post</button>
           </Link>
         </div>
@@ -35,7 +35,7 @@ export default function PostPage() {
           alt="picture"
         />
       </div>
-      <div className="postPage-content">{postInfo[0].content}</div>
+      <div className="postPage-content">{postInfo.content}</div>
     </div>
   );
 }

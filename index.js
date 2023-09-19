@@ -12,7 +12,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGODB);
+mongoose
+  .connect(process.env.MONGODB)
+  .then(() => {
+    console.log("Connecté à MongoDB");
+  })
+  .catch((err) => {
+    console.error(`Erreur lors de la connection initiale à MongoDB: ${err}`);
+  });
+
+mongoose.connection.on("connected", () => {
+  console.log("Connecté à MongoDB");
+});
+
+mongoose.connection.on("error", (err) => {
+  console.error(`Erreur de connection à MongoDB: ${err}`);
+});
+
+mongoose.connection.on("disconnected", () => {
+  console.warn("Déconnexion de MongoDB");
+});
 
 app.post("/post", async (req, res) => {
   const post = new Post(req.body);
@@ -26,21 +45,29 @@ app.get("/posts", async (_, res) => {
 });
 
 app.get("/post/:id", async (req, res) => {
-  const post = await Post.find({ _id: req.params.id });
+  const post = await Post.findById({ _id: req.params.id });
+  if (!post) {
+    return res.status(404).send("Post not found");
+  }
   res.send(post);
 });
 
 app.patch("/post/:id", async (req, res) => {
   const post = await Post.findByIdAndUpdate(req.params.id, req.body);
-  await post.save();
+  if (!post) {
+    return res.status(404).send("Post not found");
+  }
   res.send(post);
 });
 
 app.delete("/post/:id", async (req, res) => {
-  await Post.findByIdAndDelete(req.params.id);
-  res.status(200).send();
+  const post = await Post.findByIdAndDelete(req.params.id);
+  if (!post) {
+    return res.status(404).send("Post not found");
+  }
+  res.status(200).send(post);
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port : ${PORT}`);
+  console.log(`Server running on port: ${PORT}`);
 });

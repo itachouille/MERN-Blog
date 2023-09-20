@@ -4,6 +4,7 @@ import CreatePost from "./pages/CreatePost";
 import EditPost from "./pages/EditPost";
 import IndexPage from "./pages/IndexPage";
 import PostPage from "./pages/PostPage";
+import ErrorPage from "./pages/ErrorPage";
 import Layout from "./components/Layout";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/create" element={<CreatePost />} />
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/edit/:id" element={<EditPost />} />
+        <Route path="*" element={<ErrorPage />} />
       </Route>
     </Routes>
   );

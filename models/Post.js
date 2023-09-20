@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
-const { Schema, model } = mongoose;
+import mongoose from "mongoose";
+const { Schema } = mongoose;
 
 const PostSchema = new Schema(
   {
     title: {
       type: String,
       required: [true, "Title is required"],
-      minlength: [5, "Title should have at least 3 characters"],
-      maxlength: [50, "Title should not exceed 50 characters"],
+      minlength: [5, "Title should have at least 5 characters"],
+      maxlength: [40, "Title should not exceed 40 characters"],
     },
     summary: {
       type: String,
@@ -23,7 +23,4 @@ const PostSchema = new Schema(
   },
 );
 
-const PostModel = model("Post", PostSchema);
-
-module.exports = PostModel;
-
+export default mongoose.model("Post", PostSchema);

@@ -1,30 +1,28 @@
 import { useState } from "react";
 import { Navigate } from "react-router-dom";
+import { fetchFromApi } from "../utils/helpers";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
   const [redirect, setRedirect] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   async function createNewPost(e) {
     e.preventDefault();
-
     const data = {
       title,
       summary,
       content,
     };
-
-    const response = await fetch("https://hhttf0-5000.csb.app/post", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+    const response = await fetchFromApi(`post`, {
+      body: data,
     });
-
-    if (response.ok) {
+    if (response.status !== 201) {
+      const errors = response.data.errors;
+      setErrors(errors);
+    } else {
       setRedirect(true);
     }
   }
@@ -35,6 +33,15 @@ export default function CreatePost() {
 
   return (
     <form onSubmit={createNewPost}>
+      {errors && errors.length > 0 && (
+        <div className="error">
+          <ul>
+            {errors.map((errorMessage, index) => (
+              <li key={index}>{errorMessage}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="form-container">
         <div className="form-body">
           <input
@@ -60,7 +67,9 @@ export default function CreatePost() {
           />
         </div>
         <div className="form-footer">
-          <button className="button">Create Post</button>
+          <button className="button" type="submit">
+            Create Post
+          </button>
         </div>
       </div>
     </form>

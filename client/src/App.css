@@ -156,3 +156,8 @@ textarea {
   resize: none;
   outline: none;
 }
+
+.error {
+  text-align: center;
+  color: red;
+}

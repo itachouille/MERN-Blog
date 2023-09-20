@@ -2,18 +2,28 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { format } from "date-fns";
 
-export default function PostPage() {
-  const [postInfo, setPostInfo] = useState(null);
+const PostPage = () => {
   const { id } = useParams();
-  useEffect(() => {
-    fetch(`https://hhttf0-5000.csb.app/post/${id}`).then((res) => {
-      res.json().then((postInfo) => {
-        setPostInfo(postInfo);
-      });
-    });
-  }, [id]);
+  const [postInfo, setPostInfo] = useState(null);
 
-  if (!postInfo) return "";
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_BACK_URL}/post/${id}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then((responseJson) => {
+        setPostInfo(responseJson);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  if (!postInfo) {
+    return null;
+  }
 
   return (
     <div className="postPage-container">
@@ -38,4 +48,6 @@ export default function PostPage() {
       <div className="postPage-content">{postInfo.content}</div>
     </div>
   );
-}
+};
+
+export default PostPage;

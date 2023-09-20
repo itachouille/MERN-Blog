@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
+import { fetchFromApi } from "../utils/helpers";
 
 export default function EditPost() {
   const { id } = useParams();
@@ -8,9 +9,10 @@ export default function EditPost() {
   const [content, setContent] = useState("");
   const [redirectPost, setRedirectPost] = useState(false);
   const [redirectHome, setRedirectHome] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   useEffect(() => {
-    fetch(`https://hhttf0-5000.csb.app/post/${id}`).then((response) => {
+    fetch(`${process.env.REACT_APP_BACK_URL}/post/${id}`).then((response) => {
       response.json().then((postInfo) => {
         setTitle(postInfo.title);
         setSummary(postInfo.summary);
@@ -26,32 +28,32 @@ export default function EditPost() {
       summary,
       content,
     };
-    const response = await fetch(`https://hhttf0-5000.csb.app/post/${id}`, {
+    const response = await fetchFromApi(`post/${id}`, {
       method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+      body: data,
     });
-    if (response.ok) {
+    if (response.status !== 200) {
+      const errors = response.data.errors;
+      console.error(errors);
+    } else {
       setRedirectPost(true);
+    }
+  }
+
+  async function deletePost() {
+    const response = await fetchFromApi(`post/${id}`, {
+      method: "DELETE",
+    });
+    if (response.status !== 200) {
+      const errors = response.data.errors;
+      console.error(errors);
+    } else {
+      setRedirectHome(true);
     }
   }
 
   if (redirectPost) {
     return <Navigate to={"/post/" + id} />;
-  }
-
-  async function deletePost() {
-    const response = await fetch(`https://hhttf0-5000.csb.app/post/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    if (response.ok) {
-      setRedirectHome(true);
-    }
   }
 
   if (redirectHome) {
@@ -61,6 +63,15 @@ export default function EditPost() {
   return (
     <div className="form-container">
       <form onSubmit={updatePost}>
+        {errors && errors.length > 0 && (
+          <div className="error">
+            <ul>
+              {errors.map((errorMessage, index) => (
+                <li key={index}>{errorMessage}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <div className="form-body">
           <input
             type="text"

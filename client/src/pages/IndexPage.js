@@ -5,7 +5,8 @@ export default function IndexPage() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetch("https://hhttf0-5000.csb.app/posts")
+    console.log(`${process.env.BACK_URL}/posts`);
+    fetch(`${process.env.BACK_URL}/posts`)
       .then((response) => {
         if (response.ok) {
           return response.json();

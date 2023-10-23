@@ -19,7 +19,7 @@ export default function EditPost() {
         setContent(postInfo.content);
       });
     });
-  }, []);
+  }, [id]);
 
   async function updatePost(e) {
     e.preventDefault();
@@ -34,7 +34,7 @@ export default function EditPost() {
     });
     if (response.status !== 200) {
       const errors = response.data.errors;
-      console.error(errors);
+      setErrors(errors);
     } else {
       setRedirectPost(true);
     }
@@ -61,17 +61,17 @@ export default function EditPost() {
   }
 
   return (
-    <div className="form-container">
-      <form onSubmit={updatePost}>
-        {errors && errors.length > 0 && (
-          <div className="error">
-            <ul>
-              {errors.map((errorMessage, index) => (
-                <li key={index}>{errorMessage}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+    <form onSubmit={updatePost}>
+      {errors && errors.length > 0 && (
+        <div className="error">
+          <ul>
+            {errors.map((errorMessage, index) => (
+              <li key={index}>{errorMessage}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <div className="form-container">
         <div className="form-body">
           <input
             type="text"
@@ -98,12 +98,13 @@ export default function EditPost() {
         <div className="form-footer">
           <button className="button">Update Post</button>
         </div>
-      </form>
-      <div>
-        <button className="button" onClick={() => deletePost()}>
-          Delete post
-        </button>
+
+        <div>
+          <button className="button" onClick={() => deletePost()}>
+            Delete post
+          </button>
+        </div>
       </div>
-    </div>
+    </form>
   );
 }

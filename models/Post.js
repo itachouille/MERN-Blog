@@ -11,7 +11,7 @@ const PostSchema = new Schema(
     },
     summary: {
       type: String,
-      maxlength: [150, "Summary should not exceed 150 characters"],
+      maxlength: [60, "Summary should not exceed 60 characters"],
     },
     content: {
       type: String,

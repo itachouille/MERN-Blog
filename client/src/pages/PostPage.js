@@ -19,7 +19,7 @@ const PostPage = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [id]);
 
   if (!postInfo) {
     return null;
@@ -42,7 +42,7 @@ const PostPage = () => {
         <img
           className="image"
           src="https://picsum.photos/600/400"
-          alt="picture"
+          alt="article illustration"
         />
       </div>
       <div className="postPage-content">{postInfo.content}</div>

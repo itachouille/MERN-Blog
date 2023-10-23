@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 
@@ -15,7 +14,7 @@ const Post = ({ _id, title, summary, createdAt }) => {
         <img
           className="image"
           src="https://picsum.photos/600/400"
-          alt="picture"
+          alt="article illustration"
         />
       </div>
       <div className="post-body">

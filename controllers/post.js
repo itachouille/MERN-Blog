@@ -39,10 +39,25 @@ export const getOnePost = async (req, res, next) => {
 
 export const updatePost = async (req, res, next) => {
   try {
-    const updatedPost = await Post.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-    });
-    res.status(200).send(updatedPost);
+    const existingPost = await Post.findById(req.params.id);
+    if (!existingPost) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    existingPost.title = req.body.title;
+    existingPost.summary = req.body.summary;
+    existingPost.content = req.body.content;
+
+    const validationError = existingPost.validateSync();
+
+    if (validationError) {
+      res.status(400).json({
+        errors: Object.values(validationError.errors).map((val) => val.message),
+      });
+    } else {
+      const updatedPost = await existingPost.save();
+      res.status(200).send(updatedPost);
+    }
   } catch (error) {
     return next(error);
   }
